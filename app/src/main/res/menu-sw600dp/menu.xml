@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/share"
+        app:showAsAction="ifRoom"
+        android:title="share"
+        android:icon="@android:drawable/ic_menu_share"/>
+    <item android:id="@+id/map" android:title="Map Location"/>
+    <item android:id="@+id/settings" android:title="Settings"/>
+</menu>

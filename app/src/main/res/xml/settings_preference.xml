@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="@string/cityKey"
+        android:title="Location"
+        android:summary="@string/defaultCityValue"
+        android:defaultValue="@string/defaultCityValue"
+        android:entries="@array/Cities"
+        android:entryValues="@array/CitiesValue"/>
+
+    <ListPreference
+        android:key="@string/unitKey"
+        android:title="Temperature Units"
+        android:summary="@string/defaultUnit"
+        android:defaultValue="@string/defaultUnit"
+        android:entries="@array/Units"
+        android:entryValues="@array/UnitsValue"/>
+
+    <CheckBoxPreference
+        android:key="@string/notificationKey"
+        android:title="Weather Notifications"
+        android:summary="Enabled"
+        android:defaultValue="true"/>
+
+</PreferenceScreen>

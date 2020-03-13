@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">sunshine</string>
+
+    <string name="unitKey">UK</string>
+    <string-array name="Units">
+        <item>Metric</item>
+        <item>British</item>
+    </string-array>
+    <string-array name="UnitsValue">
+        <item>Metric</item>
+        <item>British</item>
+    </string-array>
+    <string name="defaultUnit">Metric</string>
+
+    <string name="cityKey">CK</string>
+    <string-array name="Cities">
+        <item>auto_ip</item>
+        <item>Changsha</item>
+        <item>Xiangtan</item>
+        <item>Zhuzhou</item>
+    </string-array>
+    <string name="defaultCity">Auto</string>
+    <string-array name="CitiesValue">
+        <item>auto_ip</item>
+        <item>Changsha</item>
+        <item>Xiangtan</item>
+        <item>Zhuzhou</item>
+    </string-array>
+    <string name="defaultCityValue">auto_ip</string>
+
+    <string name="notificationKey">NK</string>
+
+</resources>
