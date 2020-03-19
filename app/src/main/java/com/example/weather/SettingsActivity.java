@@ -25,7 +25,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private static final String TAG = WeatherListFragment.TAG;
     private Intent data;
     private List<WeatherInfo> weatherInfos;
-    private SQLiteDatabase mDatabase;
     private int getFromAPIResult = 0;
     private static int COMPLETED = 0;
     private static int UNCOMPLETED = 1;
@@ -114,7 +113,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
                 else
                 {
-                    mDatabase = new WeatherBaseHelper(getApplicationContext()).getWritableDatabase();
+                    SQLiteDatabase mDatabase = new WeatherBaseHelper(getApplicationContext()).getWritableDatabase();
                     Util.storeData(getApplicationContext(), weatherInfos, mDatabase);
                     data.putExtra("size", weatherInfos.size());
                     data.putExtra("needChangeUnit", false);
