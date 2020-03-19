@@ -1,6 +1,5 @@
 package com.example.weather;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -18,9 +16,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.DecimalFormat;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +27,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private List<WeatherInfo> weatherInfos;
     private SQLiteDatabase mDatabase;
     private int getFromAPIResult = 0;
-    private int COMPLETED = 0;
-    private int UNCOMPLETED = 1;
+    private static int COMPLETED = 0;
+    private static int UNCOMPLETED = 1;
     private String mCityValue;
     private String mPreUnit;
     private String mUnit;
@@ -39,31 +36,61 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private Preference mCityListPreference;
     private Preference mUnitListPreference;
     private Preference mNotificationPreference;
+    private MyHandler myHandler = new MyHandler(this);
 
-    private Handler handler = new Handler(){
+    static class MyHandler extends Handler{
+        WeakReference<SettingsActivity> mSettingsActivityWeakReference;
+        private MyHandler(SettingsActivity settingsActivity){ mSettingsActivityWeakReference = new WeakReference<SettingsActivity>(settingsActivity);}
         @Override
         public void handleMessage(Message msg) {
-            String s = mCityListPreference.getKey();
+            super.handleMessage(msg);
+            SettingsActivity settingsActivity = mSettingsActivityWeakReference.get();
+            String s = settingsActivity.mCityListPreference.getKey();
             if(msg.what == COMPLETED)
             {
 
-                mCityListPreference.setSummary(mSharedPreferences.getString(s, "auto_ip"));
+                settingsActivity.mCityListPreference.setSummary(settingsActivity.mSharedPreferences.getString(s, "auto_ip"));
                 //mCityListPreference.setDefaultValue(mSharedPreferences.getString(s, "auto_ip"));
-                mCityValue = mCityListPreference.getSummary().toString();
-                mPreUnit = mUnitListPreference.getSummary().toString();
-                data.putExtra("city", mCityValue);
+                settingsActivity.mCityValue = settingsActivity.mCityListPreference.getSummary().toString();
+                settingsActivity.mPreUnit = settingsActivity.mUnitListPreference.getSummary().toString();
+                settingsActivity.data.putExtra("city", settingsActivity.mCityValue);
             }
             else if(msg.what == UNCOMPLETED)
             {
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(settingsActivity.getApplicationContext(),
                         "网络连接失败，无法更换城市！",
                         Toast.LENGTH_SHORT).show();
-                mCityListPreference.setSummary(mCityValue);
+                settingsActivity.mCityListPreference.setSummary(settingsActivity.mCityValue);
                 //mCityListPreference.setDefaultValue(mCityValue);
-                mSharedPreferences.edit().putString(s, mCityValue).commit();
+                settingsActivity.mSharedPreferences.edit().putString(s, settingsActivity.mCityValue).apply();
             }
         }
-    };
+    }
+
+//    private Handler handler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//            String s = mCityListPreference.getKey();
+//            if(msg.what == COMPLETED)
+//            {
+//
+//                mCityListPreference.setSummary(mSharedPreferences.getString(s, "auto_ip"));
+//                //mCityListPreference.setDefaultValue(mSharedPreferences.getString(s, "auto_ip"));
+//                mCityValue = mCityListPreference.getSummary().toString();
+//                mPreUnit = mUnitListPreference.getSummary().toString();
+//                data.putExtra("city", mCityValue);
+//            }
+//            else if(msg.what == UNCOMPLETED)
+//            {
+//                Toast.makeText(getApplicationContext(),
+//                        "网络连接失败，无法更换城市！",
+//                        Toast.LENGTH_SHORT).show();
+//                mCityListPreference.setSummary(mCityValue);
+//                //mCityListPreference.setDefaultValue(mCityValue);
+//                mSharedPreferences.edit().putString(s, mCityValue).commit();
+//            }
+//        }
+//    };
 
     //后台线程，从网络或数据库读取数据
     private class Getter extends AsyncTask<Void, Void, Void> {
@@ -83,7 +110,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 {
                     Message message = new Message();
                     message.what = UNCOMPLETED;
-                    handler.sendMessage(message);
+                    myHandler.sendMessage(message);
                 }
                 else
                 {
@@ -97,7 +124,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     }
                     Message msg = new Message();
                     msg.what = COMPLETED;
-                    handler.sendMessage(msg);
+                    myHandler.sendMessage(msg);
                 }
             }
             return null;
@@ -181,8 +208,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 //            mUnit = mUnitListPreference.getSummary().toString();
 //            Util.storeData(getApplicationContext(), weatherInfos, mDatabase);
             mUnit = mUnitListPreference.getSummary().toString();
-            data.putExtra("isMetric", mUnit.equals("Metric") ? true : false);
-            data.putExtra("needChangeUnit", mPreUnit.equals(mUnit) ? false : true);
+            data.putExtra("isMetric", mUnit.equals("Metric"));
+            data.putExtra("needChangeUnit", !mPreUnit.equals(mUnit));
 //            data.putExtra("size", weatherInfos.size());
 //            Log.d(TAG, "onSharedPreferenceChanged: size" + weatherInfos.size());
 //            for(int i = 0; i < weatherInfos.size(); ++i)
