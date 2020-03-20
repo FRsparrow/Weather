@@ -77,15 +77,15 @@ public class WeatherDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
-        mWeekday = (TextView) v.findViewById(R.id.detail_weekday);
-        mDate = (TextView) v.findViewById(R.id.detail_date);
-        mTmpMax = (TextView) v.findViewById(R.id.detail_tmp_max);
-        mTmpMin = (TextView) v.findViewById(R.id.detail_tmp_min);
-        mWeatherImage = (ImageView) v.findViewById(R.id.detail_image);
-        mWeatherType = (TextView) v.findViewById(R.id.detail_weathertype);
-        mHumidity = (TextView) v.findViewById(R.id.detail_humidity);
-        mPressure = (TextView) v.findViewById(R.id.detail_pressure);
-        mWind = (TextView) v.findViewById(R.id.detail_wind);
+        mWeekday = v.findViewById(R.id.detail_weekday);
+        mDate = v.findViewById(R.id.detail_date);
+        mTmpMax = v.findViewById(R.id.detail_tmp_max);
+        mTmpMin = v.findViewById(R.id.detail_tmp_min);
+        mWeatherImage = v.findViewById(R.id.detail_image);
+        mWeatherType = v.findViewById(R.id.detail_weathertype);
+        mHumidity = v.findViewById(R.id.detail_humidity);
+        mPressure = v.findViewById(R.id.detail_pressure);
+        mWind = v.findViewById(R.id.detail_wind);
         return v;
     }
 }

@@ -5,8 +5,6 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -83,15 +81,8 @@ public class WeatherDetailActivity extends AppCompatActivity {
         mToolbar.setLogo(null);
         mToolbar.setNavigationIcon(R.drawable.backs);
         mToolbar.setTitle("Detail");
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
+        mToolbar.setNavigationOnClickListener(view -> finish());
+        mToolbar.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId())
                 {
                     case R.id.map:
@@ -130,8 +121,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
                         break;
                 }
                 return true;
-            }
-        });
+            });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
